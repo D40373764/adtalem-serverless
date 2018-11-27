@@ -1,0 +1,8 @@
+# Serverless directories
+.serverless
+serverless.yml
+
+.env.dev
+.env.staging
+
+test

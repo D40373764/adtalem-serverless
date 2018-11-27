@@ -1,0 +1,27 @@
+service: okta-serverless # NOTE: update this with your service name
+
+package:
+  exclude:
+    - test/**
+    - .npmignore
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorySize: 128
+  stage: dev
+  region: us-east-1
+
+functions:
+  oktaLogin:
+    handler: handler.oktaLogin
+    events:
+      - http:
+          path: /okta/login
+          method: get
+  authentication:
+    handler: handler.authentication
+    events:
+      - http:
+          path: /authentication
+          method: get

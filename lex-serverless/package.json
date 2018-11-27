@@ -1,0 +1,15 @@
+{
+  "name": "lex-serverless",
+  "version": "1.0.1",
+  "description": "Lex helper functions",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Gwowen Fu",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  }
+}

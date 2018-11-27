@@ -1,0 +1,32 @@
+service: chamberlain-serverless # NOTE: update this with your service name
+
+package:
+  exclude:
+    - test/**
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorySize: 128
+  stage: dev
+  region: us-east-1
+
+functions:
+  gpa:
+    handler: handler.gpa
+    events:
+      - http:
+          path: /gpa
+          method: get
+  accountSummary:
+    handler: handler.accountSummary
+    events:
+      - http:
+          path: /account/summary
+          method: get
+  currentTermDate:
+    handler: handler.currentTermDate
+    events:
+      - http:
+          path: /term-date/current
+          method: get
