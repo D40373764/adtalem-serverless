@@ -35,6 +35,7 @@ function dispatchOktaApi(event, callback, apiEndpoint) {
     
   request(options, (error, response, body) => {
     let content = '';
+    let contentType = 'CustomPayload';
     let data = {};
     
     if (!error && response.statusCode == 200) {
@@ -43,12 +44,12 @@ function dispatchOktaApi(event, callback, apiEndpoint) {
       data.sessionToken = body.sessionToken;
       data.username = username;
     } else {
-      content = 'Invalid username or password';
-      data = { 'error' : body.errorSummary };
+      content = body.errorSummary;
+      contentType = 'PlainText';
     }
     
     const message = {
-      'contentType': 'CustomPayload',
+      'contentType': contentType,
       'content': content
     }
 

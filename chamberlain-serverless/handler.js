@@ -51,12 +51,9 @@ function dispatch(event, callback, apiEndpoint) {
   request(options, (error, response, body) => {
     if (!error && response.statusCode == 200) {
 
-      let info = JSON.parse(body);
-      info.intent = intent;
-      
       const message = {
         'contentType': 'CustomPayload',
-        'content': JSON.stringify(info)
+        'content': body
       }
 
       callback(null, lex.close(event.sessionAttributes || {}, 'Fulfilled', message));
