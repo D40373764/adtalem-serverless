@@ -37,7 +37,6 @@ function rejectUsername(event, callback) {
  * @param {*} apiEndpoint 
  */
 function dispatch(event, callback, apiEndpoint) {
-  let intent = event.currentIntent.name;
   let options = {
       url: apiEndpoint,
       headers: {
@@ -49,17 +48,23 @@ function dispatch(event, callback, apiEndpoint) {
   };
     
   request(options, (error, response, body) => {
-    if (!error && response.statusCode == 200) {
+    if (!error) {
+      let message = {};
 
-      const message = {
-        'contentType': 'CustomPayload',
-        'content': body
+      if (response.statusCode == 200) {
+        message.contentType = 'CustomPayload';
+        message.content = body;
+      } else if (response.statusCode == 404) {
+        message.contentType = 'PlainText';
+        message.content = 'Email account not found';
+      } else {
+        const data = JSON.parse(body);
+        message.contentType = 'PlainText';
+        message.content = data.error;
       }
 
-      callback(null, lex.close(event.sessionAttributes || {}, 'Fulfilled', message));
-      
+      callback(null, lex.close(event.sessionAttributes || {}, 'Fulfilled', message));      
     } else {
-      console.log(error);
       callback(error);
     }    
   });
@@ -91,14 +96,11 @@ module.exports.gpa = (event, context, callback) => {
 module.exports.accountSummary = (event, context, callback) => {
   try {
     let username = event.currentIntent.slots.Username.toUpperCase();
-
     if (!isDsiValid(username)) {
       rejectUsername(event, callback);
       return;
     }
-
     let apiEndpoint = CHAMBERLAIN_API_URL + 'api/banner/accountsummary/dsi/' + username;
-
     dispatch(event, callback, apiEndpoint);
   } catch (err) {
       callback(err);
@@ -108,7 +110,16 @@ module.exports.accountSummary = (event, context, callback) => {
 module.exports.currentTermDate = (event, context, callback) => {
   try {
     let apiEndpoint = CHAMBERLAIN_API_URL + 'api/banner/termdetails';
+    dispatch(event, callback, apiEndpoint);
+  } catch (err) {
+      callback(err);
+  }
+};
 
+module.exports.emailCount = (event, context, callback) => {
+  try {
+    let username = event.currentIntent.slots.Username.toUpperCase();
+    let apiEndpoint = CHAMBERLAIN_API_URL + 'api/office365/emailcount/' + username;
     dispatch(event, callback, apiEndpoint);
   } catch (err) {
       callback(err);

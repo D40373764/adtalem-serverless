@@ -4,6 +4,7 @@ const assert = require('chai').assert;
 const gpa = require('../handler').gpa;
 const accountSummary = require('../handler').accountSummary;
 const currentTerm = require('../handler').currentTermDate;
+const emailCount = require('../handler').emailCount;
 
 const event = {
   "messageVersion": "1.0",
@@ -62,4 +63,17 @@ describe('handler', function () {
       done();    
     });
   });
+
+  it('email count test', function (done) {
+    emailCount(event, null, function (error, message) {
+      if (error != undefined) {
+        assert.fail(error);
+      } else {
+        console.log(message);
+        assert.isObject(message);
+      }
+      done();    
+    });
+  });
+
 });

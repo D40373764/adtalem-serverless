@@ -30,3 +30,9 @@ functions:
       - http:
           path: /term-date/current
           method: get
+  emailCount:
+    handler: handler.emailCount
+    events:
+      - http:
+          path: /email/count
+          method: get
