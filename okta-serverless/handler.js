@@ -98,7 +98,7 @@ module.exports.authentication = (event, context, callback) => {
   if (!sessionToken) {
     event.currentIntent.slots.Username = null;
     event.currentIntent.slots.Password = null;
-    callback(null, lex.switchIntent(event.sessionAttributes, event.currentIntent.slots, 'CULogin', 'Login required, continue to login?'));
+    callback(null, lex.switchIntent(event.sessionAttributes, event.currentIntent.slots, 'Okta_Login', 'Login required, continue to login?'));
   }
   else if (event.sessionAttributes.username || event.currentIntent.slots.Username) {
     event.currentIntent.slots.Username = event.currentIntent.slots.Username || event.sessionAttributes.username;

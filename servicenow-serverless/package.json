@@ -1,0 +1,24 @@
+{
+  "name": "servicenow-serverless",
+  "version": "1.0.0",
+  "description": "Get data from servicenow",
+  "main": "handler.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gwowen Fu",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "serverless": "^1.33.2"
+  },
+  "dependencies": {
+    "custom-env": "^1.0.0",
+    "lex-serverless": "^1.0.1",
+    "request": "^2.88.0"
+  }
+}

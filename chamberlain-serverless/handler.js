@@ -4,9 +4,9 @@ const request = require('request');
 const lex = require('lex-serverless');
 require('custom-env').env('staging')
 
-const CHAMBERLAIN_API_URL	= process.env.CHAMBERLAIN_API_URL;
-const CHAMBERLAIN_API_KEY	= process.env.CHAMBERLAIN_API_KEY;
-const CHAMBERLAIN_API_DSI	= process.env.CHAMBERLAIN_API_DSI;
+const CHAMBERLAIN_API_URL = process.env.CHAMBERLAIN_API_URL;
+const CHAMBERLAIN_API_KEY = process.env.CHAMBERLAIN_API_KEY;
+const CHAMBERLAIN_API_DSI = process.env.CHAMBERLAIN_API_DSI;
 const regex = /^[D][0-9]{8}$/;
 
 /**
@@ -38,15 +38,15 @@ function rejectUsername(event, callback) {
  */
 function dispatch(event, callback, apiEndpoint) {
   let options = {
-      url: apiEndpoint,
-      headers: {
-          'Accept': '*/*',
-          'Content-Type': 'application/json',
-          'authorization': CHAMBERLAIN_API_KEY,
-          'dsi': CHAMBERLAIN_API_DSI
-      }
+    url: apiEndpoint,
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'application/json',
+      'authorization': CHAMBERLAIN_API_KEY,
+      'dsi': CHAMBERLAIN_API_DSI
+    }
   };
-    
+
   request(options, (error, response, body) => {
     if (!error) {
       let message = {};
@@ -54,19 +54,16 @@ function dispatch(event, callback, apiEndpoint) {
       if (response.statusCode == 200) {
         message.contentType = 'CustomPayload';
         message.content = body;
-      } else if (response.statusCode == 404) {
-        message.contentType = 'PlainText';
-        message.content = 'Email account not found';
       } else {
         const data = JSON.parse(body);
         message.contentType = 'PlainText';
         message.content = data.error;
       }
 
-      callback(null, lex.close(event.sessionAttributes || {}, 'Fulfilled', message));      
+      callback(null, lex.close(event.sessionAttributes || {}, 'Fulfilled', message));
     } else {
       callback(error);
-    }    
+    }
   });
 }
 
@@ -86,7 +83,7 @@ module.exports.gpa = (event, context, callback) => {
 
     dispatch(event, callback, apiEndpoint);
   } catch (err) {
-      callback(err);
+    callback(err);
   }
 };
 
@@ -103,7 +100,7 @@ module.exports.accountSummary = (event, context, callback) => {
     let apiEndpoint = CHAMBERLAIN_API_URL + 'api/banner/accountsummary/dsi/' + username;
     dispatch(event, callback, apiEndpoint);
   } catch (err) {
-      callback(err);
+    callback(err);
   }
 };
 
@@ -112,7 +109,7 @@ module.exports.currentTermDate = (event, context, callback) => {
     let apiEndpoint = CHAMBERLAIN_API_URL + 'api/banner/termdetails';
     dispatch(event, callback, apiEndpoint);
   } catch (err) {
-      callback(err);
+    callback(err);
   }
 };
 
@@ -122,6 +119,6 @@ module.exports.emailCount = (event, context, callback) => {
     let apiEndpoint = CHAMBERLAIN_API_URL + 'api/office365/emailcount/' + username;
     dispatch(event, callback, apiEndpoint);
   } catch (err) {
-      callback(err);
+    callback(err);
   }
 };
