@@ -92,6 +92,7 @@ const createMessage = (message) => {
  * Check if session token exists. If not, ask user to login.
  */
 module.exports.authentication = (event, context, callback) => {
+  console.log("**authentication**");
   let sessionAttributes = event.sessionAttributes;
   let sessionToken = sessionAttributes.sessionToken;
 
@@ -102,11 +103,25 @@ module.exports.authentication = (event, context, callback) => {
     };
     callback(null, lex.switchIntent(event.sessionAttributes, event.currentIntent.slots, 'Okta_Login', 'Login required, continue to login?'));
   }
-  else if (event.sessionAttributes.username || event.currentIntent.slots.Username) {
-    event.currentIntent.slots.Username = event.currentIntent.slots.Username || event.sessionAttributes.username;
-    callback(null, lex.delegate(event.sessionAttributes || {}, event.currentIntent.slots));
-  }
   else {
-    callback(null, lex.elicitSlot(event.sessionAttributes || {}, event.currentIntent.name, event.currentIntent.slots, 'Username', createMessage('Say or enter username')));
+    if (event.currentIntent.slots.hasOwnProperty('Username')) {
+      event.currentIntent.slots.Username = event.currentIntent.slots.Username || event.sessionAttributes.username;
+    }
+    
+    let slots = event.currentIntent.slots;
+    let breakLoop = false;
+
+    Object.keys(slots).forEach(function(slotname) {
+      let val = slots[slotname];
+      if (val == null) {
+        callback(null, lex.elicitSlot(event.sessionAttributes || {}, event.currentIntent.name, event.currentIntent.slots, slotname, createMessage('Say or enter ' + slotname)));
+        breakLoop = true;
+        return;
+      }
+    });
+
+    if (!breakLoop) {
+      callback(null, lex.delegate(event.sessionAttributes || {}, event.currentIntent.slots));
+    }
   }
 };
