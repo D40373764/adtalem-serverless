@@ -67,6 +67,8 @@ function buildCustomBody(responseBody) {
 }
 
 module.exports.getWorkNotes = async (event, context, callback) => {
+  console.log("**getWorkNotes");
+
   let message = {};
   let error = null;
   console.log("**event");
@@ -89,6 +91,8 @@ module.exports.getWorkNotes = async (event, context, callback) => {
 };
 
 module.exports.getIncidentByNumber = async (event, context, callback) => {
+  console.log("**getIncidentByNumber");
+
   let message = {};
   let error = null;
   console.log("**event");
@@ -111,6 +115,8 @@ module.exports.getIncidentByNumber = async (event, context, callback) => {
 };
 
 module.exports.getIncidentsByDsi = async (event, context, callback) => {
+  console.log("**getIncidentsByDsi");
+
   let message = {};
   let error = null;
   console.log("**event");
@@ -131,6 +137,8 @@ module.exports.getIncidentsByDsi = async (event, context, callback) => {
 };
 
 module.exports.getRequestsByDsi = async (event, context, callback) => {
+  console.log("**getRequestsByDsi");
+
   let message = {};
   let error = null;
   console.log("**event");
@@ -151,6 +159,8 @@ module.exports.getRequestsByDsi = async (event, context, callback) => {
 };
 
 module.exports.getRequestByNumber = async (event, context, callback) => {
+  console.log("**getRequestByNumber");
+
   let message = {};
   let error = null;
   console.log("**event");
@@ -174,6 +184,8 @@ module.exports.getRequestByNumber = async (event, context, callback) => {
 };
 
 module.exports.getRitmsByDsi = async (event, context, callback) => {
+  console.log("**getRitmsByDsi");
+
   let message = {};
   let error = null;
   console.log("**event");
@@ -194,6 +206,8 @@ module.exports.getRitmsByDsi = async (event, context, callback) => {
 };
 
 module.exports.getRitmByNumber = async (event, context, callback) => {
+  console.log("**getRitmByNumber");
+
   let message = {};
   let error = null;
   console.log("**event");
@@ -204,7 +218,7 @@ module.exports.getRitmByNumber = async (event, context, callback) => {
     const responseBody = await dispatch(apiEndpoint);
     message.contentType = 'CustomPayload';
     message.content = responseBody;
-  } catch (exceptipn) {
+  } catch (exception) {
     error = {
       contentType: 'PlainText',
       content: exception
@@ -215,6 +229,7 @@ module.exports.getRitmByNumber = async (event, context, callback) => {
 };
 
 module.exports.getCallsByDsi = async (event, context, callback) => {
+  console.log("**getCallsByDsi");
   let message = {};
   let error = null;
   console.log("**event");
@@ -235,6 +250,8 @@ module.exports.getCallsByDsi = async (event, context, callback) => {
 };
 
 module.exports.getCallByNumber = async (event, context, callback) => {
+  console.log("**getCallByNumber");
+
   let message = {};
   let error = null;
   console.log("**event");
@@ -243,7 +260,8 @@ module.exports.getCallByNumber = async (event, context, callback) => {
     const number = event.currentIntent.slots.Call_Number;
     const apiEndpoint = CALL_BY_NUMBER_URL + number;
     const responseBody = await dispatch(apiEndpoint);
-    message = buildCustomBody(responseBody);
+    message.contentType = 'CustomPayload';
+    message.content = responseBody;
   } catch (exception) {
     error = {
       contentType: 'PlainText',
